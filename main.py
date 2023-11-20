@@ -22,6 +22,7 @@ player.add(Player())
 
 __map = []
 
+
 for i in range(config.CELL_ON_HEIGHT):
     __map.append(pygame.sprite.Group())
     for j in range(config.CELL_ON_WIDTH):
@@ -31,6 +32,16 @@ for i in range(config.CELL_ON_HEIGHT):
 utils.generate_walls(__map)
 
 clock = pygame.time.Clock()
+
+mobs = pygame.sprite.Group()
+
+n_mobs = 5
+for i in range(n_mobs):
+    mobs.add(Mob())
+
+player_entity = Player()
+player.add(player_entity)
+
 running = True
 
 while running:
@@ -40,12 +51,26 @@ while running:
             running = False
 
     player.update()
+    mobs.update()
+    if player_entity.health == 0:
+        running = False
+
+    #if len(mobs) < n_mobs:
+    #    mobs.add(Mob())
+
+    hits = pygame.sprite.groupcollide(player, mobs, False, True)
+    if hits:
+        player_entity.health -= 1
 
     # screen.fill(config.COLORS["Red"])
     screen.blit(background, (0, 0))
     # for row in __map:
     #     row.draw(screen)
+    mobs.draw(screen)
+    text = font.render(f"Hp:{player_entity.health}", False, (255, 255, 255))
+    screen.blit(text, (0, 0))
     player.draw(screen)
     pygame.display.flip()
-
+print("Hello World")
 pygame.quit()
+print("Hello World")
