@@ -108,33 +108,39 @@ class Mob(Sprite):
         self.speed_y = 5
 
     def update(self):
-        self.rect.x += self.speed_x
-        if self.rect.x > config.WIDTH - self.rect.width or self.rect.x < 0:
-            self.rect.x -= self.speed_x
-            # self.speed_x *= 0.95
+        class Mob(Sprite):
+            def __init__(self):
+                Sprite.__init__(self)
+                self.image = Surface((25, 25))
+                self.image.fill(config.COLORS[0])
+                self.rect = self.image.get_rect()
+                # self.rect.center = (config.WIDTH / 2, config.HEIGHT / 2)
+                self.rect.center = (
+                    random.randint(0, config.WIDTH - 50),
+                    random.randint(0, 0)
+                )
+                self.speed_y = random.randint(5, 10)
 
-        self.rect.y += self.speed_y
-        if self.rect.y > config.HEIGHT - self.rect.height or self.rect.y < 0:
-            self.rect.y -= self.speed_y
 
-    def compute_move(self, player: Player):
-        x_m, y_m = self.rect.center
-        x_p, y_p = player.rect.center
 
-        vector_up = utils.get_lenght(x_p, y_p, x_m, y_m - self.speed_y)
-        vector_down = utils.get_lenght(x_p, y_p, x_m, y_m + self.speed_y)
-        vector_right = utils.get_lenght(x_p, y_p, x_m + self.speed_x, y_m)
-        vector_left = utils.get_lenght(x_p, y_p, x_m - self.speed_x, y_m)
+   # def compute_move(self, player: Player):
+     #   x_m, y_m = self.rect.center
+       # x_p, y_p = player.rect.center
 
-        min_vector = min(vector_up, vector_down, vector_left, vector_right)
-        if vector_up == min_vector:
-            self.rect.y += -self.speed_y
-        if vector_down == min_vector:
-            self.rect.y += self.speed_y
-        if vector_left == min_vector:
-            self.rect.x += -self.speed_x
-        if vector_right == min_vector:
-            self.rect.x += self.speed_x
+     #   vector_up = utils.get_lenght(x_p, y_p, x_m, y_m - self.speed_y)
+     #   vector_down = utils.get_lenght(x_p, y_p, x_m, y_m + self.speed_y)
+    #    vector_right = utils.get_lenght(x_p, y_p, x_m + self.speed_x, y_m)
+   #     vector_left = utils.get_lenght(x_p, y_p, x_m - self.speed_x, y_m)
+
+  ##     min_vector = min(vector_up, vector_down, vector_left, vector_right)
+ #           if vector_up == min_vector:
+       # self.rect.y += -self.speed_y
+     #   if vector_down == min_vector:
+    #        self.rect.y += self.speed_y
+       # if vector_left == min_vector:
+      #      self.rect.x += -self.speed_x
+       # if vector_right == min_vector:
+      #      self.rect.x += self.speed_x
 
     def reverse_speed_x(self):
         self.speed_x = -self.speed_x
