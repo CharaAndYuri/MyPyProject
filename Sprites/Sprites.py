@@ -4,6 +4,10 @@ from pygame import Surface, image, transform
 import config
 import random
 import utils
+import pygame
+
+clock = pygame.time.Clock()
+running = True
 
 
 class Player(Sprite):
@@ -31,24 +35,27 @@ class Player(Sprite):
         self.speed_x = 0
         self.speed_y = 0
 
+        self.is_jump = False
+
     def update(self):
         self.speed_x = 0
-        self.speed_y = 2
+        self.speed_y += 1
         self.update_image_move(0)
 
         key = pygame.key.get_pressed()
-        #if key[pygame.K_w]:
-          #  self.speed_y = -5
-        #if key[pygame.K_s]:
-           # self.speed_y = 5
+        # if key[pygame.K_w]:
+        #  self.speed_y = -5
+        # if key[pygame.K_s]:
+        # self.speed_y = 5
         if key[pygame.K_a]:
             self.speed_x = -5
             self.update_image_move(-1)
         if key[pygame.K_d]:
             self.speed_x = 5
             self.update_image_move(1)
-        if key[pygame.K_SPACE] and self.rect.center :
+        if key[pygame.K_SPACE] and self.is_jump == False:
             self.speed_y = -10
+            self.is_jump = True
 
         self.rect.x += self.speed_x
         if self.rect.x > config.WIDTH - self.rect.width or self.rect.x < 0:
@@ -58,6 +65,7 @@ class Player(Sprite):
         self.rect.y += self.speed_y
         if self.rect.y > config.HEIGHT - self.rect.height or self.rect.y < 0:
             self.rect.y -= self.speed_y
+            self.is_jump = False
             # self.speed_y *= 0.95
 
     def update_image(self, index):
