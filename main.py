@@ -8,7 +8,7 @@ import random
 pygame.init()
 pygame.font.init()
 
-background = pygame.image.load("assets/background.jpeg")
+background = pygame.image.load("assets/T0o4T.png")
 background = pygame.transform.scale(background, (config.WIDTH, config.HEIGHT))
 
 font = pygame.font.SysFont(pygame.font.get_default_font(), 20)
@@ -66,10 +66,11 @@ while running:
     screen.blit(background, (0, 0))
     # for row in __map:
     #     row.draw(screen)
-    mobs.draw(screen)
+
     text = font.render(f"Hp:{player_entity.health}", False, (255, 255, 255))
     screen.blit(text, (0, 0))
     player.draw(screen)
+    mobs.draw(screen)
     pygame.display.flip()
 print("Hello World")
 pygame.quit()

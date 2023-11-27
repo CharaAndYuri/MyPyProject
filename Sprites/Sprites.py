@@ -1,4 +1,5 @@
 import pygame.key
+
 from pygame.sprite import Sprite
 from pygame import Surface, image, transform
 import config
@@ -16,8 +17,8 @@ class Player(Sprite):
         self.index = 0
 
         self.images = [
-            image.load("assets/spman.png"),
-            image.load("assets/spman.png")
+            image.load("assets/pixil-frame-0.png"),
+            image.load("assets/pixil-frame-0.png")
         ]
         self.images = list(map(
             lambda x: transform.scale(x, (64, 64)),
@@ -66,7 +67,7 @@ class Player(Sprite):
         if self.rect.y > config.HEIGHT - self.rect.height or self.rect.y < 0:
             self.rect.y -= self.speed_y
             self.is_jump = False
-            # self.speed_y *= 0.95
+            #self.speed_y *= 0.95
 
     def update_image(self, index):
         if self.index != index:
@@ -94,53 +95,55 @@ class Player(Sprite):
 
 class Mob(Sprite):
     def __init__(self):
-        Sprite.__init__(self)
-        self.image = Surface((20, 20))
-        self.color = config.COLORS["Red"]
-        self.image.fill(self.color)
-        self.rect = self.image.get_rect()
-        self.rect.center = (
-            random.randint(self.rect.width // 2, config.WIDTH - self.rect.width // 2),
-            random.randint(self.rect.height // 2, config.HEIGHT - self.rect.height // 2)
+       Sprite.__init__(self)
+       self.index = 0
+       self.images = [
+            image.load("assets/pixil-frame-0_1.png"),
+            image.load("assets/pixil-frame-0_1.png")
+        ]
+       self.images = list(map(
+           lambda x: transform.scale(x, (30, 30)),
+           self.images
+       ))
+       self.image = self.images[self.index]
+       self.rect = self.image.get_rect()
+       self.rect.center = (
+             random.randint(self.rect.width // 2, config.WIDTH - self.rect.width // 2),
+             random.randint(self.rect.height // 2, config.HEIGHT - self.rect.height // 2)
         )
 
-        self.speed_x = 5
-        self.speed_y = 5
+
 
     def update(self):
-        class Mob(Sprite):
-            def __init__(self):
-                Sprite.__init__(self)
-                self.image = Surface((25, 25))
-                self.image.fill(config.COLORS[0])
-                self.rect = self.image.get_rect()
-                # self.rect.center = (config.WIDTH / 2, config.HEIGHT / 2)
-                self.rect.center = (
-                    random.randint(0, config.WIDTH - 50),
-                    random.randint(0, 0)
-                )
-                self.speed_y = random.randint(5, 10)
+        def update(self):
+            self.rect.x += self.speed_x
+            if self.rect.x > config.WIDTH - self.rect.width or self.rect.x < 0:
+                self.rect.x -= self.speed_x
+                # self.speed_x *= 0.95
 
+            self.rect.y += self.speed_y
+            if self.rect.y > config.HEIGHT - self.rect.height or self.rect.y < 0:
+                self.rect.y -= self.speed_y
 
+    def compute_move(self, player: Player):
+        x_m, y_m = self.rect.center
+        x_p, y_p = player.rect.center
 
-   # def compute_move(self, player: Player):
-     #   x_m, y_m = self.rect.center
-       # x_p, y_p = player.rect.center
+        vector_up = utils.get_lenght(x_p, y_p, x_m, y_m - self.speed_y)
+        vector_down = utils.get_lenght(x_p, y_p, x_m, y_m + self.speed_y)
+        vector_right = utils.get_lenght(x_p, y_p, x_m + self.speed_x, y_m)
+        vector_left = utils.get_lenght(x_p, y_p, x_m - self.speed_x, y_m)
 
-     #   vector_up = utils.get_lenght(x_p, y_p, x_m, y_m - self.speed_y)
-     #   vector_down = utils.get_lenght(x_p, y_p, x_m, y_m + self.speed_y)
-    #    vector_right = utils.get_lenght(x_p, y_p, x_m + self.speed_x, y_m)
-   #     vector_left = utils.get_lenght(x_p, y_p, x_m - self.speed_x, y_m)
+        min_vector = min(vector_up, vector_down, vector_left, vector_right)
+        if vector_up == min_vector:
+            self.rect.y += -self.speed_y
+        if vector_down == min_vector:
+            self.rect.y += self.speed_y
+        if vector_left == min_vector:
+            self.rect.x += -self.speed_x
+        if vector_right == min_vector:
+            self.rect.x += self.speed_x
 
-  ##     min_vector = min(vector_up, vector_down, vector_left, vector_right)
- #           if vector_up == min_vector:
-       # self.rect.y += -self.speed_y
-     #   if vector_down == min_vector:
-    #        self.rect.y += self.speed_y
-       # if vector_left == min_vector:
-      #      self.rect.x += -self.speed_x
-       # if vector_right == min_vector:
-      #      self.rect.x += self.speed_x
 
     def reverse_speed_x(self):
         self.speed_x = -self.speed_x
