@@ -1,7 +1,7 @@
 import pygame
 import config
 import utils
-from Sprites.Sprites import Player, Mob
+from Sprites.Sprites import Player, Coin
 from Sprites.MapSprite import Ground
 import random
 
@@ -37,7 +37,8 @@ mobs = pygame.sprite.Group()
 
 n_mobs = 5
 for i in range(n_mobs):
-    mobs.add(Mob())
+    mobs.add(Coin())
+
 
 player_entity = Player()
 player.add(player_entity)
@@ -50,28 +51,32 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+
     player.update()
     mobs.update()
-    if player_entity.health == 0:
-        running = False
+
+
+
+
 
     #if len(mobs) < n_mobs:
-    #    mobs.add(Mob())
+    #    mobs.add(Coin())
 
     hits = pygame.sprite.groupcollide(player, mobs, False, True)
     if hits:
-        player_entity.health -= 1
+        player_entity.score += 1
+
 
     # screen.fill(config.COLORS["Red"])
     screen.blit(background, (0, 0))
     # for row in __map:
     #     row.draw(screen)
 
-    text = font.render(f"Hp:{player_entity.health}", False, (255, 255, 255))
+    text = font.render(f"Score:{player_entity.score}", False, (255, 255, 255))
     screen.blit(text, (0, 0))
     player.draw(screen)
     mobs.draw(screen)
     pygame.display.flip()
-print("Hello World")
+print("Hello World!")
 pygame.quit()
-print("Hello World")
+
