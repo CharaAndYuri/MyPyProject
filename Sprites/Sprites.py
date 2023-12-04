@@ -30,6 +30,7 @@ class Player(Sprite):
         self.rect.center = (config.WIDTH / 2, config.HEIGHT / 2)
 
         self.score = 0
+        self.health = 5
 
 
         self.speed_x = 0
@@ -147,3 +148,22 @@ class Coin(Sprite):
 
     def reverse_speed_y(self):
         self.speed_y = -self.speed_y
+class Mob(Sprite):
+        def __init__(self):
+            self.speed_y = -5
+            Sprite.__init__(self)
+            self.index = 0
+            self.images = [
+                image.load("assets/meteor.png"),
+                image.load("assets/meteor.png")
+            ]
+            self.images = list(map(
+                lambda x: transform.scale(x, (30, 30)),
+                self.images
+            ))
+            self.image = self.images[self.index]
+            self.rect = self.image.get_rect()
+            self.rect.x = random.randint(100, 500)
+            self.rect.y = random.randint(100, 500)
+            self.rect.center = (self.rect.x, self.rect.y)
+            # self.rect.center = (config.WIDTH / 5, config.HEIGHT / 3)
