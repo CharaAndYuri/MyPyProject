@@ -107,8 +107,8 @@ class Coin(Sprite):
         ))
         self.image = self.images[self.index]
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(400, 500)
-        self.rect.y = random.randint(450, 500)
+        self.rect.x = random.randint(0, 500)
+        self.rect.y = random.randint(400, 500)
         self.rect.center = (self.rect.x, self.rect.y)
         #self.rect.center = (config.WIDTH / 5, config.HEIGHT / 3)
 
@@ -151,6 +151,7 @@ class Coin(Sprite):
 class Mob(Sprite):
         def __init__(self):
             self.speed_y = -5
+
             Sprite.__init__(self)
             self.index = 0
             self.images = [
