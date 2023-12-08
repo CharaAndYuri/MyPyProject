@@ -36,8 +36,8 @@ clock = pygame.time.Clock()
 mobs = pygame.sprite.Group()
 coins = pygame.sprite.Group()
 
-
-n_mobs = 6
+n_gotten_coins = 0
+n_mobs = 4
 n_coins = 5
 for i in range(n_coins):
     coins.add(Coin())
@@ -57,6 +57,8 @@ while running:
             running = False
         if player_entity.health <= 0:
             running = False
+    for mob in mobs:
+        mob.compute_move(player_entity)
 
 
     player.update()
@@ -69,21 +71,40 @@ while running:
 
     #if len(mobs) < n_mobs:
     #    mobs.add(Coin())
+    if len(mobs) < n_mobs:
+        mobs.add((Sprites.Sprites.Mob()))
 
     hits = pygame.sprite.groupcollide(player, coins, False, True)
     if hits:
         player_entity.score += 1
         coins.add((Coin()))
-        print("U got 1 Coin, congratulations!")
+        n_gotten_coins += 1
+    if n_gotten_coins == 10:
+        print("Our congratulations Your 10 coins")
 
+    if n_gotten_coins == 50:
+        print("Wow u r good, if u got 100, u will get present!")
+
+    if n_gotten_coins == 100:
+        print("Mine congratulations, u r pro! U got 100 coins omg, so here your present")
+        print("............／＞　 フ..........")
+        print("　　　　    | 　_　 _|"        )
+        print("    　　　／`ミ _x 彡")
+        print("　　 　  /　　　 　 |")
+        print("  　　  /　 ヽ　　 ﾉ")
+        print("   ／￣|　　 |　|　|")
+        print("   | (￣ヽ＿_ヽ_)_)")
+        print("   ＼二つ")
     hits = pygame.sprite.groupcollide(player, mobs, False, True)
     if hits:
         player_entity.health -= 1
         print("U lost 1 hp, looser LOL")
-        mobs.add((Sprites.Sprites.Mob()))
+        if len(mobs) < n_mobs:
+            mobs.add((Sprites.Sprites.Mob()))
 
     # screen.fill(config.COLORS["Red"])
     screen.blit(background, (0, 0))
+
     # for row in __map:
     #     row.draw(screen)
 
@@ -98,4 +119,6 @@ while running:
     pygame.display.flip()
 print("Hello World!")
 pygame.quit()
+
+
 

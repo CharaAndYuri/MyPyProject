@@ -34,7 +34,7 @@ class Player(Sprite):
 
 
         self.speed_x = 0
-        self.speed_y = 0
+        self.speed_y = -5
 
         self.is_jump = False
 
@@ -49,10 +49,10 @@ class Player(Sprite):
         # if key[pygame.K_s]:
         # self.speed_y = 5
         if key[pygame.K_a]:
-            self.speed_x = -5
+            self.speed_x = -6
             self.update_image_move(-1)
         if key[pygame.K_d]:
-            self.speed_x = 5
+            self.speed_x = 6
             self.update_image_move(1)
         if key[pygame.K_SPACE] and self.is_jump == False:
             self.speed_y = -10
@@ -68,11 +68,22 @@ class Player(Sprite):
             self.rect.y -= self.speed_y
             self.is_jump = False
             # self.speed_y *= 0.95
+            
+        if self.rect.x < 0:
+            self.rect.x = 0
+        if self.rect.x > config.WIDTH - self.rect.width:
+            self.rect.x = config.WIDTH - self.rect.width
+        if self.rect.y < 0:
+            self.rect.y = 0
+        if self.rect.y > config.HEIGHT - self.rect.height:
+            self.rect.y = config.HEIGHT - self.rect.height
+    
 
     def update_image(self, index):
         if self.index != index:
             self.index = index
             self.image = self.images[self.index]
+
 
     def update_image_move(self, move: int):
         angle = 45 * move
@@ -149,10 +160,11 @@ class Coin(Sprite):
     def reverse_speed_y(self):
         self.speed_y = -self.speed_y
 class Mob(Sprite):
-        def __init__(self):
-            self.speed_y = -5
-
+    def __init__(self):
             Sprite.__init__(self)
+            self.speed_y = -random.randint(2, 3)
+            self.speed_x = random.randint(2, 3)
+
             self.index = 0
             self.images = [
                 image.load("assets/meteor.png"),
@@ -164,7 +176,30 @@ class Mob(Sprite):
             ))
             self.image = self.images[self.index]
             self.rect = self.image.get_rect()
-            self.rect.x = random.randint(100, 500)
-            self.rect.y = random.randint(100, 500)
+            self.rect.center = (
+                random.randint(0, config.WIDTH - 50),
+                random.randint(0, 10)
+            )
+           #self.rect.x = random.randint(100, 500)
+           #self.rect.y = random.randint(100, 500)
             self.rect.center = (self.rect.x, self.rect.y)
             # self.rect.center = (config.WIDTH / 5, config.HEIGHT / 3)
+    def update(self):
+        if self.rect.y + self.rect.height < config.HEIGHT:
+            self.rect.y -= self.speed_y
+        else:
+            self.kill()
+
+    def compute_move(self, player: Player):
+        x_player, y_player = player.rect.center  # (10, 20)
+        x_mob, y_mob = self.rect.center
+
+        move_right = utils.lenght(x_player, y_player, x_mob + self.speed_x, y_mob)
+        move_left = utils.lenght(x_player, y_player, x_mob - self.speed_x, y_mob)
+        stay_here = utils.lenght(x_player, y_player, x_mob, y_mob)
+
+        min_len = min(move_left, move_right, stay_here)
+        if min_len == move_left:
+            self.rect.x -= self.speed_x
+        if min_len == move_right:
+            self.rect.x += self.speed_x
