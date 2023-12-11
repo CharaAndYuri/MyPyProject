@@ -31,7 +31,8 @@ class Player(Sprite):
 
         self.score = 0
         self.health = 5
-
+        self.resist = 0
+        self.time_while_living = 0
 
         self.speed_x = 0
         self.speed_y = -5
@@ -39,10 +40,12 @@ class Player(Sprite):
         self.is_jump = False
 
     def update(self):
+        self.time_while_living += 0.01
         self.speed_x = 0
         self.speed_y += 1
         self.update_image_move(0)
-
+        if self.resist > 0:
+            self.resist -= 1
         key = pygame.key.get_pressed()
         # if key[pygame.K_w]:
         #  self.speed_y = -5

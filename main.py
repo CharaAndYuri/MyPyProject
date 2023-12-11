@@ -96,9 +96,11 @@ while running:
         print("   | (￣ヽ＿_ヽ_)_)")
         print("   ＼二つ")
     hits = pygame.sprite.groupcollide(player, mobs, False, True)
-    if hits:
+    if hits and player_entity.resist <= 0:
         player_entity.health -= 1
+        player_entity.resist += 150 #3 seconds
         print("U lost 1 hp, looser LOL")
+
         if len(mobs) < n_mobs:
             mobs.add((Sprites.Sprites.Mob()))
 
@@ -112,6 +114,8 @@ while running:
     screen.blit(text, (0, 0))
     text = font.render(f"Health:{player_entity.health}", False, (255, 0, 0))
     screen.blit(text, (10, 10))
+    text = font.render(f"Resist:{player_entity.resist}", False, (0, 0, 255))
+    screen.blit(text, (20, 20))
     player.draw(screen)
     mobs.draw(screen)
     coins.draw(screen)
