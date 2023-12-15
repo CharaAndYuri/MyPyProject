@@ -32,7 +32,7 @@ class Player(Sprite):
         self.score = 0
         self.health = 5
         self.resist = 0
-        self.time_while_living = 0
+        self.time = 0
 
         self.speed_x = 0
         self.speed_y = -5
@@ -40,12 +40,12 @@ class Player(Sprite):
         self.is_jump = False
 
     def update(self):
-        self.time_while_living += 0.01
+        self.time += 0.02
         self.speed_x = 0
         self.speed_y += 1
         self.update_image_move(0)
         if self.resist > 0:
-            self.resist -= 1
+            self.resist -= 0.02
         key = pygame.key.get_pressed()
         # if key[pygame.K_w]:
         #  self.speed_y = -5
@@ -80,7 +80,7 @@ class Player(Sprite):
             self.rect.y = 0
         if self.rect.y > config.HEIGHT - self.rect.height:
             self.rect.y = config.HEIGHT - self.rect.height
-    
+
 
     def update_image(self, index):
         if self.index != index:
@@ -112,8 +112,8 @@ class Coin(Sprite):
         Sprite.__init__(self)
         self.index = 0
         self.images = [
-            image.load("assets/money.2.png"),
-            image.load("assets/money.2.png")
+            image.load("assets/money.4.png"),
+            image.load("assets/money.4.png")
         ]
         self.images = list(map(
             lambda x: transform.scale(x, (30, 30)),
@@ -170,8 +170,8 @@ class Mob(Sprite):
 
             self.index = 0
             self.images = [
-                image.load("assets/meteor.png"),
-                image.load("assets/meteor.png")
+                image.load("assets/meteor.2.png"),
+                image.load("assets/meteor.2.png")
             ]
             self.images = list(map(
                 lambda x: transform.scale(x, (30, 30)),
@@ -187,6 +187,7 @@ class Mob(Sprite):
            #self.rect.y = random.randint(100, 500)
             self.rect.center = (self.rect.x, self.rect.y)
             # self.rect.center = (config.WIDTH / 5, config.HEIGHT / 3)
+
     def update(self):
         if self.rect.y + self.rect.height < config.HEIGHT:
             self.rect.y -= self.speed_y

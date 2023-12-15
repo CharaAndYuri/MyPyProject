@@ -60,7 +60,6 @@ while running:
     for mob in mobs:
         mob.compute_move(player_entity)
 
-
     player.update()
     coins.update()
     mobs.update()
@@ -71,6 +70,8 @@ while running:
 
     #if len(mobs) < n_mobs:
     #    mobs.add(Coin())
+    if len(coins) < n_coins:
+        coins.add((Coin()))
     if len(mobs) < n_mobs:
         mobs.add((Sprites.Sprites.Mob()))
 
@@ -98,7 +99,7 @@ while running:
     hits = pygame.sprite.groupcollide(player, mobs, False, True)
     if hits and player_entity.resist <= 0:
         player_entity.health -= 1
-        player_entity.resist += 150 #3 seconds
+        player_entity.resist += 3  #3 seconds
         print("U lost 1 hp, looser LOL")
 
         if len(mobs) < n_mobs:
@@ -116,6 +117,8 @@ while running:
     screen.blit(text, (10, 10))
     text = font.render(f"Resist:{player_entity.resist}", False, (0, 0, 255))
     screen.blit(text, (20, 20))
+    text = font.render(f"Life time:{player_entity.time}", False, (0, 255, 0))
+    screen.blit(text, (30, 30))
     player.draw(screen)
     mobs.draw(screen)
     coins.draw(screen)
