@@ -57,6 +57,7 @@ while running:
             running = False
         if player_entity.health <= 0:
             running = False
+            print("U r lose LOL")
     for mob in mobs:
         mob.compute_move(player_entity)
 
@@ -96,6 +97,13 @@ while running:
         print("   ／￣|　　 |　|　|")
         print("   | (￣ヽ＿_ヽ_)_)")
         print("   ＼二つ")
+
+    if n_gotten_coins == 100:
+        player_entity.score -= 100
+        n_gotten_coins -= 100
+        player_entity.health += 1
+        print("converted 100 coins into 1 health")
+
     hits = pygame.sprite.groupcollide(player, mobs, False, True)
     if hits and player_entity.resist <= 0:
         player_entity.health -= 1
@@ -115,9 +123,9 @@ while running:
     screen.blit(text, (0, 0))
     text = font.render(f"Health:{player_entity.health}", False, (255, 0, 0))
     screen.blit(text, (10, 10))
-    text = font.render(f"Resist:{player_entity.resist}", False, (0, 0, 255))
+    text = font.render(f"Resist:{int(player_entity.resist)}", False, (0, 0, 255))
     screen.blit(text, (20, 20))
-    text = font.render(f"Life time:{player_entity.time}", False, (0, 255, 0))
+    text = font.render(f"Life time:{int(player_entity.time)}", False, (0, 255, 0))
     screen.blit(text, (30, 30))
     player.draw(screen)
     mobs.draw(screen)
