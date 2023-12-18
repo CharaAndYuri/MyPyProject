@@ -17,7 +17,7 @@ class Player(Sprite):
         self.index = 0
 
         self.images = [
-            image.load("assets/meteor.2.png"),
+            image.load("assets/dino.2.png"),
             image.load("assets/pngegg.png")
         ]
         self.images = list(map(
@@ -171,8 +171,8 @@ class Mob(Sprite):
 
             self.index = 0
             self.images = [
-                image.load("assets/dino.2.png"),
-                image.load("assets/dino.2.png")
+                image.load("assets/meteor.2.png"),
+                image.load("assets/meteor.2.png")
             ]
             self.images = list(map(
                 lambda x: transform.scale(x, (40, 40)),
