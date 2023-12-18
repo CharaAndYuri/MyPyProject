@@ -17,8 +17,8 @@ class Player(Sprite):
         self.index = 0
 
         self.images = [
-            image.load("assets/dino.2.png"),
-            image.load("assets/dino.2.png")
+            image.load("assets/meteor.2.png"),
+            image.load("assets/pngegg.png")
         ]
         self.images = list(map(
             lambda x: transform.scale(x, (64, 64)),
@@ -35,7 +35,7 @@ class Player(Sprite):
         self.time = 0
 
         self.speed_x = 0
-        self.speed_y = -5
+        self.speed_y = -7
 
         self.is_jump = False
 
@@ -52,14 +52,15 @@ class Player(Sprite):
         # if key[pygame.K_s]:
         # self.speed_y = 5
         if key[pygame.K_a]:
-            self.speed_x = -6
+            self.speed_x = -8
             self.update_image_move(-1)
         if key[pygame.K_d]:
-            self.speed_x = 6
+            self.speed_x = 8
             self.update_image_move(1)
         if key[pygame.K_SPACE] and self.is_jump == False:
             self.speed_y = -10
             self.is_jump = True
+            self.image = self.images[1]
 
         self.rect.x += self.speed_x
         if self.rect.x > config.WIDTH - self.rect.width or self.rect.x < 0:
@@ -121,8 +122,8 @@ class Coin(Sprite):
         ))
         self.image = self.images[self.index]
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(0, 500)
-        self.rect.y = random.randint(400, 500)
+        self.rect.x = random.randint(0, 1000)
+        self.rect.y = random.randint(900, 1000)
         self.rect.center = (self.rect.x, self.rect.y)
         #self.rect.center = (config.WIDTH / 5, config.HEIGHT / 3)
 
@@ -165,16 +166,16 @@ class Coin(Sprite):
 class Mob(Sprite):
     def __init__(self):
             Sprite.__init__(self)
-            self.speed_y = -random.randint(2, 3)
-            self.speed_x = random.randint(2, 3)
+            self.speed_y = -random.randint(5, 6)
+            self.speed_x = random.randint(5, 6)
 
             self.index = 0
             self.images = [
-                image.load("assets/meteor.2.png"),
-                image.load("assets/meteor.2.png")
+                image.load("assets/dino.2.png"),
+                image.load("assets/dino.2.png")
             ]
             self.images = list(map(
-                lambda x: transform.scale(x, (30, 30)),
+                lambda x: transform.scale(x, (40, 40)),
                 self.images
             ))
             self.image = self.images[self.index]

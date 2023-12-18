@@ -12,7 +12,7 @@ pygame.font.init()
 background = pygame.image.load("assets/map.png")
 background = pygame.transform.scale(background, (config.WIDTH, config.HEIGHT))
 
-font = pygame.font.SysFont(pygame.font.get_default_font(), 20)
+font = pygame.font.SysFont(pygame.font.get_default_font(), 37)
 
 screen = pygame.display.set_mode(
     (config.WIDTH, config.HEIGHT)
@@ -122,11 +122,11 @@ while running:
     text = font.render(f"Score:{player_entity.score}", False, (255, 255, 0))
     screen.blit(text, (0, 0))
     text = font.render(f"Health:{player_entity.health}", False, (255, 0, 0))
-    screen.blit(text, (10, 10))
+    screen.blit(text, (10, 20))
     text = font.render(f"Resist:{int(player_entity.resist)}", False, (0, 0, 255))
-    screen.blit(text, (20, 20))
+    screen.blit(text, (20, 40))
     text = font.render(f"Life time:{int(player_entity.time)}", False, (0, 255, 0))
-    screen.blit(text, (30, 30))
+    screen.blit(text, (30, 60))
     player.draw(screen)
     mobs.draw(screen)
     coins.draw(screen)
