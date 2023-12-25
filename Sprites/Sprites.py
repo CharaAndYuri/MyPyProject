@@ -40,7 +40,7 @@ class Player(Sprite):
         self.is_jump = False
 
     def update(self):
-        self.time += 0.02
+        self.time += 1
         self.speed_x = 0
         self.speed_y += 1
         self.update_image_move(0)
@@ -176,6 +176,53 @@ class Mob(Sprite):
             ]
             self.images = list(map(
                 lambda x: transform.scale(x, (40, 40)),
+                self.images
+            ))
+            self.image = self.images[self.index]
+            self.rect = self.image.get_rect()
+            self.rect.center = (
+                random.randint(0, config.WIDTH - 50),
+                random.randint(0, 10)
+            )
+           #self.rect.x = random.randint(100, 500)
+           #self.rect.y = random.randint(100, 500)
+            self.rect.center = (self.rect.x, self.rect.y)
+            # self.rect.center = (config.WIDTH / 5, config.HEIGHT / 3)
+
+    def update(self):
+        if self.rect.y + self.rect.height < config.HEIGHT:
+            self.rect.y -= self.speed_y
+        else:
+            self.kill()
+
+    def compute_move(self, player: Player):
+        x_player, y_player = player.rect.center  # (10, 20)
+        x_mob, y_mob = self.rect.center
+
+        move_right = utils.lenght(x_player, y_player, x_mob + self.speed_x, y_mob)
+        move_left = utils.lenght(x_player, y_player, x_mob - self.speed_x, y_mob)
+        stay_here = utils.lenght(x_player, y_player, x_mob, y_mob)
+
+        min_len = min(move_left, move_right, stay_here)
+        if min_len == move_left:
+            self.rect.x -= self.speed_x
+        if min_len == move_right:
+            self.rect.x += self.speed_x
+
+
+class Boss(Sprite):
+    def __init__(self):
+            Sprite.__init__(self)
+            self.speed_y = -random.randint(5, 6)
+            self.speed_x = random.randint(5, 6)
+
+            self.index = 0
+            self.images = [
+                image.load("assets/meteor.png"),
+                image.load("assets/meteor.png")
+            ]
+            self.images = list(map(
+                lambda x: transform.scale(x, (400, 400)),
                 self.images
             ))
             self.image = self.images[self.index]

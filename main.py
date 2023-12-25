@@ -35,10 +35,16 @@ utils.generate_walls(__map)
 clock = pygame.time.Clock()
 mobs = pygame.sprite.Group()
 coins = pygame.sprite.Group()
+bosses = pygame.sprite.Group()
 
+n_bosses = 0
 n_gotten_coins = 0
 n_mobs = 4
-n_coins = 5
+n_coins = 10
+
+for i in range(n_bosses):
+    bosses.add(Sprites.Sprites.Boss())
+
 for i in range(n_coins):
     coins.add(Coin())
 
@@ -52,29 +58,40 @@ running = True
 
 while running:
     clock.tick(config.FRAMERATE)
+    if player_entity.health <= 0:
+        running = False
+        print("U r lose LOL")
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if player_entity.health <= 0:
-            running = False
-            print("U r lose LOL")
+
     for mob in mobs:
         mob.compute_move(player_entity)
+
+    for Boss in bosses:
+        Boss.compute_move(player_entity)
 
     player.update()
     coins.update()
     mobs.update()
+    bosses.update()
 
-
-
-
-
-    #if len(mobs) < n_mobs:
-    #    mobs.add(Coin())
     if len(coins) < n_coins:
         coins.add((Coin()))
     if len(mobs) < n_mobs:
         mobs.add((Sprites.Sprites.Mob()))
+
+    if player_entity.time == 1 and player_entity.health > 5:
+        bosses.add((Sprites.Sprites.Boss()))
+        n_bosses += 1
+    if player_entity.time == 1200: #1200 - 20 секунд
+        bosses.add((Sprites.Sprites.Boss()))
+        n_bosses += 1
+    hits = pygame.sprite.groupcollide(player, bosses, False, True)
+    if hits:
+        player_entity.health -= 3
+        player_entity.resist += 10
+        print("if u still alive u r god or fk cheater")
 
     hits = pygame.sprite.groupcollide(player, coins, False, True)
     if hits:
@@ -123,13 +140,14 @@ while running:
     screen.blit(text, (0, 0))
     text = font.render(f"Health:{player_entity.health}", False, (255, 0, 0))
     screen.blit(text, (10, 20))
-    text = font.render(f"Resist:{int(player_entity.resist)}", False, (0, 0, 255))
+    text = font.render(f"Resist:{(int(player_entity.resist))}", False, (0, 0, 255))
     screen.blit(text, (20, 40))
-    text = font.render(f"Life time:{int(player_entity.time)}", False, (0, 255, 0))
+    text = font.render(f"Life time:{player_entity.time//60}", False, (0, 255, 0))
     screen.blit(text, (30, 60))
     player.draw(screen)
     mobs.draw(screen)
     coins.draw(screen)
+    bosses.draw(screen)
 
     pygame.display.flip()
 print("Hello World!")
